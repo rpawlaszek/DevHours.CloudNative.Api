@@ -1,4 +1,5 @@
 using System;
+using DevHours.CloudNative.Api.Exceptions.Extensions;
 using DevHours.CloudNative.Api.OData.Extensions;
 using DevHours.CloudNative.Core;
 using DevHours.CloudNative.Infra;
@@ -30,6 +31,8 @@ namespace DevHours.CloudNative.Api
                     .AddODataBindings();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddErrorHandler();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

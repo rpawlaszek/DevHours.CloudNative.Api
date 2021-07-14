@@ -4,9 +4,9 @@ using DevHours.CloudNative.Domain;
 
 namespace DevHours.CloudNative.Api.Mappings
 {
-    public class MappingProfile : Profile
+    public class DtoMappingProfile : Profile
     {
-        public MappingProfile()
+        public DtoMappingProfile()
         {
             AllowNullCollections = true;
             CreateMap<RoomDto, Room>();
