@@ -1,0 +1,39 @@
+@uri = https://localhost:5001
+
+@bookingsuri = {{uri}}/api/bookings
+
+###
+
+GET {{bookingsuri}}?$select=StartDate
+
+###
+
+POST {{bookingsuri}}
+Content-Type: application/json
+
+{
+    "RoomId": 1,
+    "IsActive": true,
+    "StartDate": "2021-02-12T00:00:00Z",
+    "EndDate": "2021-02-13T00:00:00Z",
+    "Description": "This is the new room"
+}
+
+###
+
+GET {{bookingsuri}}/2
+
+
+###
+
+PUT {{bookingsuri}}/2
+Content-Type: application/json
+
+{
+    "id": 2,
+    "roomId": 2
+}
+
+###
+
+DELETE {{bookingsuri}}/1

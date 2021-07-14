@@ -1,0 +1,39 @@
+@uri = https://localhost:5001
+
+@roomsuri = {{uri}}/api/rooms
+
+###
+
+GET {{roomsuri}}
+
+###
+
+GET {{roomsuri}}/1/bookings
+
+###
+
+POST {{roomsuri}}
+Content-Type: application/json
+
+{
+    "Description": "This is a new room"
+}
+
+###
+
+PUT {{roomsuri}}/2
+Content-Type: application/json
+
+{
+    "Id": 2,
+    "Description": "This is a room description"
+}
+
+###
+
+GET {{roomsuri}}/2
+
+
+###
+
+DELETE {{roomsuri}}/1
