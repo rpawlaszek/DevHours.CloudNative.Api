@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.OData;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DevHours.CloudNative.Api.OData.Extensions
+namespace DevHours.CloudNative.Api.Data.OData.Extensions
 {
     public static class IMvcBuilderExtensions
     {

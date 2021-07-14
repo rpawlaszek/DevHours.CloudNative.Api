@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace DevHours.CloudNative.Api.Dtos
+namespace DevHours.CloudNative.Api.Data.Dtos
 {
     public class RoomDto
     {

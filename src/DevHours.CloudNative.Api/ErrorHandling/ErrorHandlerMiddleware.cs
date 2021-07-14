@@ -9,7 +9,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace DevHours.CloudNative.Api.Exceptions
+namespace DevHours.CloudNative.Api.ErrorHandling
 {
     internal sealed class ErrorHandlerMiddleware : IMiddleware
     {

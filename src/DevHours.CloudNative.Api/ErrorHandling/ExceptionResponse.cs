@@ -3,7 +3,7 @@
  */
 using System.Net;
 
-namespace DevHours.CloudNative.Api.Exceptions
+namespace DevHours.CloudNative.Api.ErrorHandling
 {
     public class ExceptionResponse
     {

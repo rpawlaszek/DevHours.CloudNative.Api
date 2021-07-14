@@ -1,5 +1,5 @@
 using AutoMapper;
-using DevHours.CloudNative.Api.Dtos;
+using DevHours.CloudNative.Api.Data.Dtos;
 using DevHours.CloudNative.Domain;
 
 namespace DevHours.CloudNative.Api.Mappings

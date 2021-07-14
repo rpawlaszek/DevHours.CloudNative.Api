@@ -1,7 +1,7 @@
-using DevHours.CloudNative.Api.Dtos;
+using DevHours.CloudNative.Api.Data.Dtos;
 using Microsoft.OData.ModelBuilder;
 
-namespace DevHours.CloudNative.Api.OData
+namespace DevHours.CloudNative.Api.Data.OData
 {
     public class HotelModelBuilder : ODataConventionModelBuilder
     {

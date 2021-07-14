@@ -1,9 +1,9 @@
 using System;
 using System.Net;
 using AutoMapper;
-using DevHours.CloudNative.Api.Exceptions;
+using DevHours.CloudNative.Api.ErrorHandling;
 
-namespace DevHours.CloudNative.Exceptions.Mappings
+namespace DevHours.CloudNative.Api.ErrorHandling.Mappings
 {
     public class ExceptionMappingProfile : Profile
     {

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DevHours.CloudNative.Api.Exceptions.Extensions
+namespace DevHours.CloudNative.Api.ErrorHandling.Extensions
 {
     public static class IServiceCollectionExtensions
     {

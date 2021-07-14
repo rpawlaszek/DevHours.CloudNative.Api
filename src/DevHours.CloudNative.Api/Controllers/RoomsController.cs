@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Formatter;
-using DevHours.CloudNative.Api.Dtos;
+using DevHours.CloudNative.Api.Data.Dtos;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 

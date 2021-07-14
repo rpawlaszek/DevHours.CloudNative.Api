@@ -1,6 +1,6 @@
 using System;
-using DevHours.CloudNative.Api.Exceptions.Extensions;
-using DevHours.CloudNative.Api.OData.Extensions;
+using DevHours.CloudNative.Api.ErrorHandling.Extensions;
+using DevHours.CloudNative.Api.Data.OData.Extensions;
 using DevHours.CloudNative.Core;
 using DevHours.CloudNative.Infra;
 using Microsoft.AspNetCore.Builder;
