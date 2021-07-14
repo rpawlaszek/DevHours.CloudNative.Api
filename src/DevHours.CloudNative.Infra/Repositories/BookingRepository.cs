@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DevHours.CloudNative.DataAccess;
-using DevHours.CloudNative.Models;
+using DevHours.CloudNative.Domain;
 
 namespace DevHours.CloudNative.Repositories 
 {

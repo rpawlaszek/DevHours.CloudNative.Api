@@ -1,11 +1,14 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using DevHours.CloudNative.Models;
+using DevHours.CloudNative.Domain;
 using DevHours.CloudNative.Repositories;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.AspNetCore.OData.Query;
+using AutoMapper;
+using DevHours.CloudNative.Api.Dtos;
+using AutoMapper.QueryableExtensions;
 
 namespace DevHours.CloudNative.Api.Controllers
 {
@@ -14,42 +17,43 @@ namespace DevHours.CloudNative.Api.Controllers
     public class BookingsController : ControllerBase
     {
         private readonly ILogger logger;
-        private readonly IDataRepository<Booking> service;
+        private readonly IDataRepository<Booking> repository;
+        private readonly IMapper mapper;
+        private readonly IConfigurationProvider configurationProvider;
 
-        public BookingsController(ILogger<BookingsController> logger, IDataRepository<Booking> service)
-            => (this.logger, this.service) = (logger, service);
+        public BookingsController(ILogger<BookingsController> logger, IDataRepository<Booking> repository, IMapper mapper, IConfigurationProvider configurationProvider)
+            => (this.logger, this.repository, this.mapper, this.configurationProvider) = (logger, repository, mapper, configurationProvider);
 
         [HttpGet]
         [EnableQuery]
-        public IQueryable<Booking> GetBookings() => service.Query();
-
-        [HttpGet]
-        [Route("/api/rooms/{roomId}/bookings")]
-        [EnableQuery]
-        public IQueryable<Booking> GetRoomBookings(int roomId) => service.Query().Where(b => b.RoomId == roomId);
+        public IQueryable<BookingDto> GetBookings() => repository.Query().ProjectTo<BookingDto>(configurationProvider);
 
         [HttpGet("{id}", Name = "GetBooking")]
-        public async ValueTask<ActionResult<Booking>> Get(int id) => await service.GetAsync(id);
+        public async ValueTask<ActionResult<BookingDto>> Get(int id)
+        {
+            var booking = await repository.GetAsync(id);
+            return mapper.Map<BookingDto>(booking);
+        }
 
         [HttpPost]
-        public async Task<ActionResult<Booking>> Create(Booking room, CancellationToken token = default)
+        public async Task<ActionResult<BookingDto>> Create(BookingDto booking, CancellationToken token = default)
         {
-            await service.AddAsync(room, token);
+            var addedBooking = await repository.AddAsync(mapper.Map<Booking>(booking), token);
 
-            return CreatedAtRoute("GetBooking", new { id = room.Id }, room);
+            return CreatedAtRoute("GetBooking", new { id = addedBooking.Id }, mapper.Map<BookingDto>(addedBooking));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Booking room, CancellationToken token = default)
+        public async Task<IActionResult> Update(int id, BookingDto booking, CancellationToken token = default)
         {
-            var stored = await service.GetAsync(id);
+            var stored = await repository.GetAsync(id);
 
             if (stored is null)
             {
                 return NotFound();
             }
 
-            await service.UpdateAsync(room, token);
+            await repository.UpdateAsync(mapper.Map<Booking>(booking), token);
 
             return NoContent();
         }
@@ -57,14 +61,14 @@ namespace DevHours.CloudNative.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id, CancellationToken token = default)
         {
-            var stored = await service.GetAsync(id);
+            var stored = await repository.GetAsync(id);
 
             if (stored is null)
             {
                 return NotFound();
             }
 
-            await service.DeleteAsync(stored, token);
+            await repository.DeleteAsync(stored, token);
 
             return NoContent();
         }

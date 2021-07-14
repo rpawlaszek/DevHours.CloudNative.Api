@@ -1,14 +1,12 @@
+using System;
+using DevHours.CloudNative.Api.OData.Extensions;
 using DevHours.CloudNative.Core;
 using DevHours.CloudNative.Infra;
-using DevHours.CloudNative.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.OData;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OData.Edm;
-using Microsoft.OData.ModelBuilder;
 
 namespace DevHours.CloudNative.Api
 {
@@ -26,28 +24,12 @@ namespace DevHours.CloudNative.Api
         {
             services.AddCloudNativeCore()
                     .AddCloudNativeInfrastructure();
-                    
+
             services.AddControllers(options => options.EnableEndpointRouting = false)
                     .AddJsonOptions(o => o.JsonSerializerOptions.PropertyNamingPolicy = null)
-                    .AddOData(o =>
-                    {
-                        o.Count().Filter().Expand().Select().OrderBy().SetMaxTop(25);
-                        o.AddRouteComponents(GetEdmModel());
-                    });
-        }
+                    .AddODataBindings();
 
-        private IEdmModel GetEdmModel()
-        {
-            var builder = new ODataConventionModelBuilder();//.EnableLowerCamelCase();
-
-            var rooms = builder.EntitySet<Room>(nameof(Room));
-            rooms.EntityType.HasKey(r => r.Id);
-            rooms.EntityType.HasMany(r => r.Bookings);
-
-            var bookings = builder.EntitySet<Booking>(nameof(Booking));
-            bookings.EntityType.HasKey(b => b.Id);
-
-            return builder.GetEdmModel();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,12 +1,15 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using DevHours.CloudNative.Models;
+using DevHours.CloudNative.Domain;
 using DevHours.CloudNative.Repositories;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Formatter;
+using DevHours.CloudNative.Api.Dtos;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace DevHours.CloudNative.Api.Controllers
 {
@@ -15,54 +18,60 @@ namespace DevHours.CloudNative.Api.Controllers
     public class RoomsController : ControllerBase
     {
         private readonly ILogger logger;
-        private readonly IDataRepository<Room> roomsService;
+        private readonly IDataRepository<Room> repository;
+        private readonly IMapper mapper;
+        private readonly IConfigurationProvider configurationProvider;
 
-        public RoomsController(ILogger<RoomsController> logger, IDataRepository<Room> roomsService)
-            => (this.logger, this.roomsService) = (logger, roomsService);
+        public RoomsController(ILogger<RoomsController> logger, IDataRepository<Room> repository, IMapper mapper, IConfigurationProvider configurationProvider)
+            => (this.logger, this.repository, this.mapper, this.configurationProvider) = (logger, repository, mapper, configurationProvider);
 
         [HttpGet]
         [EnableQuery]
-        public IQueryable<Room> GetRooms() => roomsService.Query();
+        public IQueryable<RoomDto> GetRooms() => repository.Query().ProjectTo<RoomDto>(configurationProvider);
 
         [HttpGet("{id:int}", Name = "GetRoom")]
-        public async Task<ActionResult<Room>> GetRoomAsync([FromODataUri] int id) => await roomsService.GetAsync(id);
+        public async Task<ActionResult<RoomDto>> GetRoomAsync([FromODataUri] int id)
+        {
+            var room = await repository.GetAsync(id);
+            return mapper.Map<RoomDto>(room);
+        }
 
         [HttpPost]
-        public async Task<ActionResult<Room>> Create(Room room, CancellationToken token = default) 
+        public async Task<ActionResult<RoomDto>> Create(RoomDto room, CancellationToken token = default)
         {
-            await roomsService.AddAsync(room, token);
+            var addedRoom = await repository.AddAsync(mapper.Map<Room>(room), token);
 
-            return CreatedAtRoute("GetRoom", new { id = room.Id }, room);
+            return CreatedAtRoute("GetRoom", new { id = addedRoom.Id }, mapper.Map<RoomDto>(addedRoom));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Room room, CancellationToken token = default) 
+        public async Task<IActionResult> Update(int id, RoomDto room, CancellationToken token = default)
         {
-            var stored = await roomsService.GetAsync(id);
+            var stored = await repository.GetAsync(id);
 
             if (stored is null)
             {
                 return NotFound();
             }
 
-            await roomsService.UpdateAsync(room, token);
+            await repository.UpdateAsync(mapper.Map<Room>(room), token);
 
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id, CancellationToken token = default) 
+        public async Task<IActionResult> Delete(int id, CancellationToken token = default)
         {
-            var stored = await roomsService.GetAsync(id);
+            var stored = await repository.GetAsync(id);
 
             if (stored is null)
             {
                 return NotFound();
             }
 
-            await roomsService.DeleteAsync(stored, token);
+            await repository.DeleteAsync(stored, token);
 
-            return NoContent();   
+            return NoContent();
         }
     }
 }

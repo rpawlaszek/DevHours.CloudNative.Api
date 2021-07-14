@@ -1,4 +1,4 @@
-using DevHours.CloudNative.Models;
+using DevHours.CloudNative.Domain;
 using DevHours.CloudNative.DataAccess;
 using DevHours.CloudNative.Repositories;
 using Microsoft.EntityFrameworkCore;

@@ -8,10 +8,6 @@ GET {{roomsuri}}
 
 ###
 
-GET {{roomsuri}}/1/bookings
-
-###
-
 POST {{roomsuri}}
 Content-Type: application/json
 

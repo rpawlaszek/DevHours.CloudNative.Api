@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace DevHours.CloudNative.Models
+namespace DevHours.CloudNative.Domain
 {
     public class Room
     {

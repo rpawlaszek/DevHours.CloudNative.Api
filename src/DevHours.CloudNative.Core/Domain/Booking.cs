@@ -1,6 +1,6 @@
 using System;
 
-namespace DevHours.CloudNative.Models
+namespace DevHours.CloudNative.Domain
 {
     public class Booking
     {
