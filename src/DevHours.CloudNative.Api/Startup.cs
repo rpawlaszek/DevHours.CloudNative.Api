@@ -49,6 +49,8 @@ namespace DevHours.CloudNative.Api
 
             app.UseAuthorization();
 
+            app.UseErrorHandler();
+
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
