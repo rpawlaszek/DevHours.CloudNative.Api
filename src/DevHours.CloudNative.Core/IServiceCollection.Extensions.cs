@@ -9,6 +9,7 @@ namespace DevHours.CloudNative.Core
         public static IServiceCollection AddCloudNativeCore(this IServiceCollection services)
         {
             services.AddScoped<RoomService>();
+            services.AddScoped<RoomBookingService>();
             services.AddScoped<RoomImagesService>();
             return services;
         }

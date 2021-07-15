@@ -2,7 +2,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using DevHours.CloudNative.Domain;
-using DevHours.CloudNative.Repositories;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.AspNetCore.OData.Query;

@@ -31,7 +31,6 @@ namespace DevHours.CloudNative.Api
                     .AddODataBindings();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
             services.AddErrorHandler();
         }
 
