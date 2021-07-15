@@ -61,7 +61,6 @@ namespace DevHours.CloudNative.Api.Controllers
         public async Task<IActionResult> Delete(int id, CancellationToken token = default)
         {
             await service.DeleteRoomAsync(id, token);
-
             return NoContent();
         }
     }

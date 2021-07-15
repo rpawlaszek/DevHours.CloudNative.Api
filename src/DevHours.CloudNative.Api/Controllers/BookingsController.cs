@@ -39,7 +39,6 @@ namespace DevHours.CloudNative.Api.Controllers
         public async Task<ActionResult<BookingDto>> Book(BookingDto booking, CancellationToken token = default)
         {
             var addedBooking = await service.Book(mapper.Map<Booking>(booking), token);
-
             return CreatedAtRoute("GetBooking", new { id = addedBooking.Id }, mapper.Map<BookingDto>(addedBooking));
         }
 
