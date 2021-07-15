@@ -1,5 +1,5 @@
 /*
- * Consumed from: https://github.com/snatch-dev/Convey/blob/master/src/Convey.WebApi/src/Convey.WebApi/Exceptions/ExceptionResponse.cs
+ * Consumed and adapted from: https://github.com/snatch-dev/Convey/blob/master/src/Convey.WebApi/src/Convey.WebApi/Exceptions/ExceptionResponse.cs
  */
 using System.Net;
 
@@ -7,13 +7,7 @@ namespace DevHours.CloudNative.Api.ErrorHandling
 {
     public class ExceptionResponse
     {
-        public object Response { get; }
-        public HttpStatusCode StatusCode { get; }
-
-        public ExceptionResponse(object response, HttpStatusCode statusCode)
-        {
-            Response = response;
-            StatusCode = statusCode;
-        }
+        public object Response { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
     }
 }

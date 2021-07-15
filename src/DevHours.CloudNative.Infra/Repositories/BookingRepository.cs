@@ -15,7 +15,7 @@ namespace DevHours.CloudNative.Repositories
 
         public IQueryable<Booking> Query() => context.Bookings;
 
-        public ValueTask<Booking> GetAsync(int id) => context.Bookings.FindAsync(id);
+        public ValueTask<Booking> GetAsync(int id, CancellationToken token = default) => context.Bookings.FindAsync(id);
 
         public async Task<Booking> AddAsync(Booking room, CancellationToken token = default) 
         {

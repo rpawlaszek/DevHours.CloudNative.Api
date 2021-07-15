@@ -39,8 +39,9 @@ namespace DevHours.CloudNative.Api.ErrorHandling
         private async Task HandleErrorAsync(HttpContext context, Exception exception)
         {
             var exceptionResponse = mapper.Map<ExceptionResponse>(exception);
-            context.Response.StatusCode = (int) (exceptionResponse?.StatusCode ?? HttpStatusCode.BadRequest);
+            context.Response.StatusCode = (int)(exceptionResponse?.StatusCode ?? HttpStatusCode.BadRequest);
             var response = exceptionResponse?.Response;
+
             if (response is null)
             {
                 await context.Response.WriteAsync(string.Empty);

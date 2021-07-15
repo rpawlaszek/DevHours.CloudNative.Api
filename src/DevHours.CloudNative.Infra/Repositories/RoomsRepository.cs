@@ -14,7 +14,7 @@ namespace DevHours.CloudNative.Repositories
 
         public IQueryable<Room> Query() => context.Rooms;
 
-        public ValueTask<Room> GetAsync(int id) => context.Rooms.FindAsync(id);
+        public ValueTask<Room> GetAsync(int id, CancellationToken token = default) => context.Rooms.FindAsync(id);
 
         public async Task<Room> AddAsync(Room room, CancellationToken token = default) 
         {
