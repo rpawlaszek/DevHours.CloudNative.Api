@@ -1,5 +1,5 @@
-using DevHours.CloudNative.DataAccess;
 using DevHours.CloudNative.Domain;
+using DevHours.CloudNative.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.Extensions.Logging;
@@ -15,25 +15,24 @@ namespace DevHours.CloudNative.Api.Controllers
     public class RoomsController : ControllerBase
     {
         private readonly ILogger logger;
-        private readonly HotelContext context;
+        private readonly IDataRepository<Room> repository;
 
-        public RoomsController(ILogger<RoomsController> logger, HotelContext context)
-            => (this.logger, this.context) = (logger, context);
+        public RoomsController(ILogger<RoomsController> logger, IDataRepository<Room> repository)
+            => (this.logger, this.repository) = (logger, repository);
 
         [HttpGet]
         [EnableQuery]
-        public IQueryable<Room> GetRooms() => context.Rooms;
+        public IQueryable<Room> GetRooms() => repository.Query();
 
         [HttpGet("{id:int}", Name = "GetRoom")]
         public ValueTask<Room> GetRoomAsync(int id, CancellationToken token = default) 
-            => context.Rooms.FindAsync(id);
+            => repository.GetAsync(id, token);
 
         [HttpPost]
         public async Task<ActionResult<Room>> AddRoom(Room room, CancellationToken token = default)
         {
-            var addedRoom = await context.Rooms.AddAsync(room, token);
-            await context.SaveChangesAsync(token);
-            return CreatedAtRoute("GetRoom", new { id = addedRoom.Entity.Id }, addedRoom.Entity);
+            var addedRoom = await repository.AddAsync(room, token);
+            return CreatedAtRoute("GetRoom", new { id = addedRoom.Id }, addedRoom);
         }
 
         [HttpPut("{id}")]
@@ -44,8 +43,7 @@ namespace DevHours.CloudNative.Api.Controllers
                 throw new Exception("Id mismatch");
             }
 
-            context.Rooms.Update(room);
-            await context.SaveChangesAsync(token);
+            await repository.UpdateAsync(room, token);
 
             return NoContent();
         }
@@ -53,15 +51,14 @@ namespace DevHours.CloudNative.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id, CancellationToken token = default)
         {
-            var stored = await context.Rooms.FindAsync(id, token);
+            var stored = await repository.GetAsync(id, token);
 
             if (stored is null) 
             {
                 throw new NullReferenceException("stored");
             }
 
-            context.Rooms.Remove(stored);
-            await context.SaveChangesAsync(token);
+            await repository.DeleteAsync(stored, token);
 
             return NoContent();
         }

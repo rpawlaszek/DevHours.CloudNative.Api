@@ -1,5 +1,5 @@
-using DevHours.CloudNative.DataAccess;
 using DevHours.CloudNative.Domain;
+using DevHours.CloudNative.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.Extensions.Logging;
@@ -15,39 +15,37 @@ namespace DevHours.CloudNative.Api.Controllers
     public class BookingsController : ControllerBase
     {
         private readonly ILogger logger;
-        private readonly HotelContext context;
+        private readonly IDataRepository<Booking> repository;
 
-        public BookingsController(ILogger<BookingsController> logger, HotelContext context)
-            => (this.logger, this.context) = (logger, context);
+        public BookingsController(ILogger<BookingsController> logger, IDataRepository<Booking> repository)
+            => (this.logger, this.repository) = (logger, repository);
 
         [HttpGet]
         [EnableQuery]
-        public IQueryable<Booking> GetBookings() => context.Bookings;
+        public IQueryable<Booking> GetBookings() => repository.Query();
 
         [HttpGet("{id}", Name = "GetBooking")]
         public ValueTask<Booking> GetBooking(int id, CancellationToken token = default) 
-            => context.Bookings.FindAsync(id);
+            => repository.GetAsync(id, token);
 
         [HttpPost]
         public async Task<ActionResult<Booking>> Book(Booking booking, CancellationToken token = default)
         {
-            var addedBooking = await context.Bookings.AddAsync(booking, token);
-            await context.SaveChangesAsync(token);
-            return CreatedAtRoute("GetBooking", new { id = addedBooking.Entity.Id }, addedBooking.Entity);
+            var addedBooking = await repository.AddAsync(booking, token);
+            return CreatedAtRoute("GetBooking", new { id = addedBooking.Id }, addedBooking);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> CancelBooking(int id, CancellationToken token = default)
         {
-            var stored = await context.Bookings.FindAsync(id, token);
+            var stored = await repository.GetAsync(id, token);
 
             if (stored is null) 
             {
                 throw new NullReferenceException("stored");
             }
 
-            context.Bookings.Remove(stored);
-            await context.SaveChangesAsync(token);
+            await repository.DeleteAsync(stored, token);
 
             return NoContent();
         }

@@ -10,6 +10,8 @@ using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.OData;
 using DevHours.CloudNative.Api.Data.OData;
 using DevHours.CloudNative.Api.ErrorHandling.Extensions;
+using DevHours.CloudNative.Repositories;
+using DevHours.CloudNative.Domain;
 
 namespace DevHours.CloudNative.Api
 {
@@ -40,11 +42,16 @@ namespace DevHours.CloudNative.Api
                         o.AddRouteComponents(builder.GetEdmModel());
                     });
 
-            services.AddScoped<BlobContainerClient>(provider =>
+            services.AddScoped<IDataRepository<Room>, RoomsRepository>();
+            services.AddScoped<IDataRepository<Booking>, BookingRepository>();
+
+            services.AddScoped<IBlobRepository<string>>(provider =>
             {
                 var configuration = provider.GetService<IConfiguration>();
-                var blobServiceClient = new BlobServiceClient(configuration.GetSection("Images").GetValue<string>("ConnectionString"));
-                return blobServiceClient.GetBlobContainerClient(configuration.GetSection("Images").GetValue<string>("ContainerName"));
+                return new RoomImagesRepository(
+                    configuration.GetSection("Images").GetValue<string>("ConnectionString"),
+                    configuration.GetSection("Images").GetValue<string>("ContainerName")
+                );
             });
             
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
