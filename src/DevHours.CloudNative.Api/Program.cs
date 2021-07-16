@@ -7,12 +7,11 @@ namespace DevHours.CloudNative.Api
 {
     public class Program
     {
+        const string APP_NAME = "DH.Backend";
+
         public static void Main(string[] args)
         {
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .WriteTo.Console()
-                .CreateLogger();
+            LoggerConfigurationExtensions.SetupLoggerConfiguration(APP_NAME);
 
             try
             {
@@ -31,7 +30,11 @@ namespace DevHours.CloudNative.Api
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .UseSerilog()
+                .UseSerilog((hostBuilderContext, services, loggerConfiguration) =>
+                {
+                    loggerConfiguration.ConfigureBaseLogging(APP_NAME);
+                    loggerConfiguration.AddApplicationInsightsLogging(services, hostBuilderContext.Configuration);
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
