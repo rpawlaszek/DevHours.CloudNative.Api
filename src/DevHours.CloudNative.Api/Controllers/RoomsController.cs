@@ -1,3 +1,4 @@
+using DevHours.CloudNative.Core.Services;
 using DevHours.CloudNative.Domain;
 using DevHours.CloudNative.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -15,23 +16,23 @@ namespace DevHours.CloudNative.Api.Controllers
     public class RoomsController : ControllerBase
     {
         private readonly ILogger logger;
-        private readonly IDataRepository<Room> repository;
+        private readonly RoomService service;
 
-        public RoomsController(ILogger<RoomsController> logger, IDataRepository<Room> repository)
-            => (this.logger, this.repository) = (logger, repository);
+        public RoomsController(ILogger<RoomsController> logger, RoomService service)
+            => (this.logger, this.service) = (logger, service);
 
         [HttpGet]
         [EnableQuery]
-        public IQueryable<Room> GetRooms() => repository.Query();
+        public IQueryable<Room> GetRooms() => service.Query();
 
         [HttpGet("{id:int}", Name = "GetRoom")]
         public ValueTask<Room> GetRoomAsync(int id, CancellationToken token = default) 
-            => repository.GetAsync(id, token);
+            => service.GetRoomAsync(id, token);
 
         [HttpPost]
         public async Task<ActionResult<Room>> AddRoom(Room room, CancellationToken token = default)
         {
-            var addedRoom = await repository.AddAsync(room, token);
+            var addedRoom = await service.AddRoomAsync(room, token);
             return CreatedAtRoute("GetRoom", new { id = addedRoom.Id }, addedRoom);
         }
 
@@ -43,7 +44,7 @@ namespace DevHours.CloudNative.Api.Controllers
                 throw new Exception("Id mismatch");
             }
 
-            await repository.UpdateAsync(room, token);
+            await service.UpdateRoomAsync(room, token);
 
             return NoContent();
         }
@@ -51,15 +52,7 @@ namespace DevHours.CloudNative.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id, CancellationToken token = default)
         {
-            var stored = await repository.GetAsync(id, token);
-
-            if (stored is null) 
-            {
-                throw new NullReferenceException("stored");
-            }
-
-            await repository.DeleteAsync(stored, token);
-
+            await service.DeleteRoomAsync(id, token);
             return NoContent();
         }
     }

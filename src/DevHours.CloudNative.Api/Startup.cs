@@ -6,12 +6,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.OData;
 using DevHours.CloudNative.Api.Data.OData;
 using DevHours.CloudNative.Api.ErrorHandling.Extensions;
 using DevHours.CloudNative.Repositories;
 using DevHours.CloudNative.Domain;
+using DevHours.CloudNative.Core.Services;
 
 namespace DevHours.CloudNative.Api
 {
@@ -53,6 +53,10 @@ namespace DevHours.CloudNative.Api
                     configuration.GetSection("Images").GetValue<string>("ContainerName")
                 );
             });
+            
+            services.AddScoped<RoomService>();
+            services.AddScoped<RoomBookingService>();
+            services.AddScoped<RoomImagesService>();
             
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddErrorHandler();
