@@ -1,4 +1,4 @@
-using DevHours.CloudNative.Repositories;
+using DevHours.CloudNative.Core.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;

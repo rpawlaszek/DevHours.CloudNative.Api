@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using DevHours.CloudNative.Repositories;
 
-namespace DevHours.CloudNative.Repositories
+namespace DevHours.CloudNative.Core.Services
 {
     public class RoomImagesService
     {
