@@ -1,8 +1,5 @@
-using DevHours.CloudNative.Api.Data.OData.Extensions;
-using DevHours.CloudNative.Api.ErrorHandling.Extensions;
-using DevHours.CloudNative.Core;
+using Microsoft.EntityFrameworkCore;
 using DevHours.CloudNative.DataAccess;
-using DevHours.CloudNative.Infra;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -24,15 +21,14 @@ namespace DevHours.CloudNative.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCloudNativeCore()
-                    .AddCloudNativeInfrastructure(Configuration);
+            services.AddDbContext<HotelContext>(o =>
+            {
+                o.UseInMemoryDatabase("hoteldb")
+                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            });
 
             services.AddControllers(options => options.EnableEndpointRouting = false)
-                    .AddJsonOptions(o => o.JsonSerializerOptions.PropertyNamingPolicy = null)
-                    .AddODataBindings();
-
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddErrorHandler();
+                    .AddJsonOptions(o => o.JsonSerializerOptions.PropertyNamingPolicy = null);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,15 +45,7 @@ namespace DevHours.CloudNative.Api
 
             app.UseAuthorization();
 
-            app.UseErrorHandler();
-
             app.UseEndpoints(endpoints => endpoints.MapControllers());
-
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                var dbContext = serviceScope.ServiceProvider.GetService<HotelContext>();
-                dbContext.Database.EnsureCreated();
-            }
         }
     }
 }

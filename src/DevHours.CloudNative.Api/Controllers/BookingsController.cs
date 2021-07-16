@@ -1,11 +1,8 @@
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using DevHours.CloudNative.Api.Data.Dtos;
-using DevHours.CloudNative.Core.Services;
+using DevHours.CloudNative.DataAccess;
 using DevHours.CloudNative.Domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OData.Query;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,35 +14,39 @@ namespace DevHours.CloudNative.Api.Controllers
     public class BookingsController : ControllerBase
     {
         private readonly ILogger logger;
-        private readonly RoomBookingService service;
-        private readonly IMapper mapper;
-        private readonly IConfigurationProvider configurationProvider;
+        private readonly HotelContext context;
 
-        public BookingsController(ILogger<BookingsController> logger, RoomBookingService service, IMapper mapper, IConfigurationProvider configurationProvider)
-            => (this.logger, this.service, this.mapper, this.configurationProvider) = (logger, service, mapper, configurationProvider);
+        public BookingsController(ILogger<BookingsController> logger, HotelContext context)
+            => (this.logger, this.context) = (logger, context);
 
         [HttpGet]
-        [EnableQuery]
-        public IQueryable<BookingDto> GetBookings() => service.Query().ProjectTo<BookingDto>(configurationProvider);
+        public IQueryable<Booking> GetBookings() => context.Bookings;
 
         [HttpGet("{id}", Name = "GetBooking")]
-        public async ValueTask<ActionResult<BookingDto>> GetBooking(int id, CancellationToken token = default)
-        {
-            var booking = await service.GetBookingAsync(id, token);
-            return mapper.Map<BookingDto>(booking);
-        }
+        public ValueTask<Booking> GetBooking(int id, CancellationToken token = default) 
+            => context.Bookings.FindAsync(id);
 
         [HttpPost]
-        public async Task<ActionResult<BookingDto>> Book(BookingDto booking, CancellationToken token = default)
+        public async Task<ActionResult<Booking>> Book(Booking booking, CancellationToken token = default)
         {
-            var addedBooking = await service.Book(mapper.Map<Booking>(booking), token);
-            return CreatedAtRoute("GetBooking", new { id = addedBooking.Id }, mapper.Map<BookingDto>(addedBooking));
+            var addedBooking = await context.Bookings.AddAsync(booking, token);
+            await context.SaveChangesAsync(token);
+            return CreatedAtRoute("GetBooking", new { id = addedBooking.Entity.Id }, addedBooking.Entity);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> CancelBooking(int id, CancellationToken token = default)
         {
-            await service.CancelBooking(id, token);
+            var stored = await context.Bookings.FindAsync(id, token);
+
+            if (stored is null) 
+            {
+                throw new NullReferenceException("stored");
+            }
+
+            context.Bookings.Remove(stored);
+            await context.SaveChangesAsync(token);
+
             return NoContent();
         }
     }
