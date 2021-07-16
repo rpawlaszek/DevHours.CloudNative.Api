@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using DevHours.CloudNative.DataAccess;
 
 namespace DevHours.CloudNative.Api
 {
@@ -24,7 +25,7 @@ namespace DevHours.CloudNative.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCloudNativeCore()
-                    .AddCloudNativeInfrastructure();
+                    .AddCloudNativeInfrastructure(Configuration);
 
             services.AddControllers(options => options.EnableEndpointRouting = false)
                     .AddJsonOptions(o => o.JsonSerializerOptions.PropertyNamingPolicy = null)
@@ -51,6 +52,12 @@ namespace DevHours.CloudNative.Api
             app.UseErrorHandler();
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var dbContext = serviceScope.ServiceProvider.GetService<HotelContext>();
+                dbContext.Database.EnsureCreated();
+            }
         }
     }
 }

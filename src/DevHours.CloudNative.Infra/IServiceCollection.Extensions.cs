@@ -9,12 +9,13 @@ namespace DevHours.CloudNative.Infra
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddCloudNativeInfrastructure(this IServiceCollection services)
+        public static IServiceCollection AddCloudNativeInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<HotelContext>(o =>
-                o.UseInMemoryDatabase("hotel")
-                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-            );
+            {
+                o.UseSqlServer(connectionString: configuration.GetConnectionString("HotelContext"))
+                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            });
 
             services.AddScoped<IDataRepository<Room>, RoomsRepository>();
             services.AddScoped<IDataRepository<Booking>, BookingRepository>();

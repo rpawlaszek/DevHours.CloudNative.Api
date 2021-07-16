@@ -4,7 +4,7 @@
 
 ###
 
-GET {{roomsuri}}?$select=Description
+GET {{roomsuri}}
 
 ###
 
