@@ -13,8 +13,18 @@ namespace DevHours.CloudNative.Infra
         {
             services.AddDbContext<HotelContext>(o =>
             {
-                o.UseSqlServer(connectionString: configuration.GetConnectionString("HotelContext"))
-                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                var hotelConnectionString = configuration.GetConnectionString("HotelContext");
+
+                if (string.IsNullOrWhiteSpace(hotelConnectionString))
+                {
+                    o.UseInMemoryDatabase("hoteldb")
+                     .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                }
+                else
+                {
+                    o.UseSqlServer(connectionString: hotelConnectionString)
+                     .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                }
             });
 
             services.AddScoped<IDataRepository<Room>, RoomsRepository>();

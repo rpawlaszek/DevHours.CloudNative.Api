@@ -16,7 +16,7 @@ Content-Type: image/png
 
 ###
 # @name imgs
-GET {{roomsuri}}/1/images
+GET {{roomsuri}}/6/images
 
 @frst_img = {{imgs.response.body.$[0]}}
 
