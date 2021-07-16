@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using Azure.Storage.Blobs;
 
 namespace DevHours.CloudNative.Api
 {
@@ -29,6 +30,13 @@ namespace DevHours.CloudNative.Api
 
             services.AddControllers(options => options.EnableEndpointRouting = false)
                     .AddJsonOptions(o => o.JsonSerializerOptions.PropertyNamingPolicy = null);
+
+            services.AddScoped<BlobContainerClient>(provider =>
+            {
+                var configuration = provider.GetService<IConfiguration>();
+                var blobServiceClient = new BlobServiceClient(configuration.GetSection("Images").GetValue<string>("ConnectionString"));
+                return blobServiceClient.GetBlobContainerClient(configuration.GetSection("Images").GetValue<string>("ContainerName"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

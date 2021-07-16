@@ -1,0 +1,25 @@
+@uri = https://localhost:5001
+
+@roomsuri = {{uri}}/api/rooms
+
+###
+
+POST {{roomsuri}}/1/images
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="sample.png"
+Content-Type: image/png
+
+< ./sample.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+# @name imgs
+GET {{roomsuri}}/1/images
+
+@frst_img = {{imgs.response.body.$[0]}}
+
+###
+
+DELETE {{roomsuri}}/1/images/{{frst_img}}
