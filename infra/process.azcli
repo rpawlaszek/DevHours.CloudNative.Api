@@ -1,0 +1,17 @@
+## Login to Azure
+az login
+
+## Install Bicep command
+# az bicep install
+
+## Create RG to work in
+az group create --name rg-devhours-cloudnative --location eastus
+
+## Deploy the template
+az deployment group create --template-file ./stack.bicep --resource-group rg-devhours-cloudnative
+
+## Get the RG id
+az group list --query "[?name=='rg-devhours-cloudnative']" | jq '.[] | .id'
+
+## Create a Service Principal
+az ad sp create-for-rbac --name "websiteadvnlyqqyzokm" --role contributor --scopes /subscriptions/61272011-aa35-4524-95c7-bb9c842f4e39/resourceGroups/rg-devhours-cloudnative --sdk-auth

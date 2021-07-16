@@ -13,7 +13,7 @@ namespace DevHours.CloudNative.Infra
         {
             services.AddDbContext<HotelContext>(o =>
             {
-                var hotelConnectionString = configuration.GetConnectionString("HotelContext");
+                var hotelConnectionString = configuration.GetConnectionString("HotelDbConnection");
 
                 if (string.IsNullOrWhiteSpace(hotelConnectionString))
                 {
@@ -34,8 +34,8 @@ namespace DevHours.CloudNative.Infra
             {
                 var configuration = provider.GetService<IConfiguration>();
                 return new RoomImagesRepository(
-                    configuration.GetSection("Images").GetValue<string>("ConnectionString"),
-                    configuration.GetSection("Images").GetValue<string>("ContainerName")
+                    configuration.GetConnectionString("Images"),
+                    "images"
                 );
             });
 
