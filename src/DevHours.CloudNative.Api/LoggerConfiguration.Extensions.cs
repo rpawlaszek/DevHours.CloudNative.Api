@@ -12,39 +12,42 @@ using Serilog.Sinks.SystemConsole.Themes;
 
 namespace DevHours.CloudNative.Api
 {
-    internal static class LoggerConfigurationExtensions {
-    internal static void SetupLoggerConfiguration(string appName) {
-        Log.Logger = new LoggerConfiguration()
-            .ConfigureBaseLogging(appName)
-            .CreateLogger();
-    }
-
-    internal static LoggerConfiguration ConfigureBaseLogging(
-        this LoggerConfiguration loggerConfiguration,
-        string appName
-    ) {
-        loggerConfiguration
-            .MinimumLevel.Debug()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-            .WriteTo.Async(a => a.Console(theme: AnsiConsoleTheme.Code))
-            .Enrich.FromLogContext()
-            .Enrich.WithMachineName()
-            .Enrich.WithThreadId()
-            .Enrich.WithProperty("ApplicationName", appName);
-
-        return loggerConfiguration;
-    }
-
-    internal static LoggerConfiguration AddApplicationInsightsLogging(this LoggerConfiguration loggerConfiguration, IServiceProvider services, IConfiguration configuration)
+    internal static class LoggerConfigurationExtensions
     {
-        if (!string.IsNullOrWhiteSpace(configuration.GetValue<string>("APPINSIGHTS_INSTRUMENTATIONKEY")))
+        internal static void SetupLoggerConfiguration(string appName)
         {
-            loggerConfiguration.WriteTo.ApplicationInsights(
-                services.GetRequiredService<TelemetryConfiguration>(),
-                TelemetryConverter.Traces);
+            Log.Logger = new LoggerConfiguration()
+                .ConfigureBaseLogging(appName)
+                .CreateLogger();
         }
 
-        return loggerConfiguration;
+        internal static LoggerConfiguration ConfigureBaseLogging(
+            this LoggerConfiguration loggerConfiguration,
+            string appName
+        )
+        {
+            loggerConfiguration
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .WriteTo.Async(a => a.Console(theme: AnsiConsoleTheme.Code))
+                .Enrich.FromLogContext()
+                .Enrich.WithMachineName()
+                .Enrich.WithThreadId()
+                .Enrich.WithProperty("ApplicationName", appName);
+
+            return loggerConfiguration;
+        }
+
+        internal static LoggerConfiguration AddApplicationInsightsLogging(this LoggerConfiguration loggerConfiguration, IServiceProvider services, IConfiguration configuration)
+        {
+            if (!string.IsNullOrWhiteSpace(configuration.GetValue<string>("APPINSIGHTS_INSTRUMENTATIONKEY")))
+            {
+                loggerConfiguration.WriteTo.ApplicationInsights(
+                    services.GetRequiredService<TelemetryConfiguration>(),
+                    TelemetryConverter.Traces);
+            }
+
+            return loggerConfiguration;
+        }
     }
-}
 }
