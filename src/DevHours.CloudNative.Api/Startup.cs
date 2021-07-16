@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.OData;
+using DevHours.CloudNative.Api.Data.OData;
 
 namespace DevHours.CloudNative.Api
 {
@@ -29,7 +31,13 @@ namespace DevHours.CloudNative.Api
             });
 
             services.AddControllers(options => options.EnableEndpointRouting = false)
-                    .AddJsonOptions(o => o.JsonSerializerOptions.PropertyNamingPolicy = null);
+                    .AddJsonOptions(o => o.JsonSerializerOptions.PropertyNamingPolicy = null)
+                    .AddOData(o =>
+                    {
+                        o.Count().Filter().Expand().Select().OrderBy().SetMaxTop(25);
+                        var builder = new HotelModelBuilder();
+                        o.AddRouteComponents(builder.GetEdmModel());
+                    });
 
             services.AddScoped<BlobContainerClient>(provider =>
             {

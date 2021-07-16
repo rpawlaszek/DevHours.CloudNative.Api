@@ -4,7 +4,7 @@
 
 ###
 
-GET {{bookingsuri}}?$select=StartDate
+GET {{bookingsuri}}
 
 ###
 
@@ -12,7 +12,7 @@ POST {{bookingsuri}}
 Content-Type: application/json
 
 {
-    "RoomId": 6,
+    "RoomId": 1,
     "IsActive": true,
     "StartDate": "2021-07-17T00:00:00Z",
     "EndDate": "2021-07-16T00:00:00Z",

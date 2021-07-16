@@ -1,6 +1,7 @@
 using DevHours.CloudNative.DataAccess;
 using DevHours.CloudNative.Domain;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace DevHours.CloudNative.Api.Controllers
             => (this.logger, this.context) = (logger, context);
 
         [HttpGet]
+        [EnableQuery]
         public IQueryable<Booking> GetBookings() => context.Bookings;
 
         [HttpGet("{id}", Name = "GetBooking")]
