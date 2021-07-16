@@ -19,7 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevHours.CloudNative.Infra.Tests", "test\DevHours.CloudNative.Infra.Tests\DevHours.CloudNative.Infra.Tests.csproj", "{25BA5B89-8E61-46BB-B550-D9B3EC947CB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevHours.CloudNative.Infra.Tests", "test\DevHours.CloudNative.Infra.Tests\DevHours.CloudNative.Infra.Tests.csproj", "{25BA5B89-8E61-46BB-B550-D9B3EC947CB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevHours.CloudNative.Core.Test", "test\DevHours.CloudNative.Core.Test\DevHours.CloudNative.Core.Test.csproj", "{918295FF-D9FF-450C-A016-BE526318F41F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{25BA5B89-8E61-46BB-B550-D9B3EC947CB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25BA5B89-8E61-46BB-B550-D9B3EC947CB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25BA5B89-8E61-46BB-B550-D9B3EC947CB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{918295FF-D9FF-450C-A016-BE526318F41F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{918295FF-D9FF-450C-A016-BE526318F41F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{918295FF-D9FF-450C-A016-BE526318F41F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{918295FF-D9FF-450C-A016-BE526318F41F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,6 +58,7 @@ Global
 		{BA14634B-14F7-41CE-A37C-430D215AECBE} = {AF8C28FC-EDC1-4042-ACAE-2005D5749CB1}
 		{CF25D0C2-0092-4AFB-ABAA-992EE0AAA62D} = {AF8C28FC-EDC1-4042-ACAE-2005D5749CB1}
 		{25BA5B89-8E61-46BB-B550-D9B3EC947CB9} = {BB9D8E2A-3F30-4B07-B56C-18DF9B495D74}
+		{918295FF-D9FF-450C-A016-BE526318F41F} = {BB9D8E2A-3F30-4B07-B56C-18DF9B495D74}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {53C93775-784D-471E-93EE-24CFA19E8533}
