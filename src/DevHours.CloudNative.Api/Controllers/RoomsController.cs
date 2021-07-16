@@ -25,7 +25,8 @@ namespace DevHours.CloudNative.Api.Controllers
         public IQueryable<Room> GetRooms() => context.Rooms;
 
         [HttpGet("{id:int}", Name = "GetRoom")]
-        public ValueTask<Room> GetRoomAsync(int id, CancellationToken token = default) => context.Rooms.FindAsync(id, token);
+        public ValueTask<Room> GetRoomAsync(int id, CancellationToken token = default) 
+            => context.Rooms.FindAsync(id);
 
         [HttpPost]
         public async Task<ActionResult<Room>> AddRoom(Room room, CancellationToken token = default)

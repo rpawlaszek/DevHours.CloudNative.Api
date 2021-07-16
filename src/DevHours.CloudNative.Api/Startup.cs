@@ -9,6 +9,7 @@ using System;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.OData;
 using DevHours.CloudNative.Api.Data.OData;
+using DevHours.CloudNative.Api.ErrorHandling.Extensions;
 
 namespace DevHours.CloudNative.Api
 {
@@ -45,6 +46,9 @@ namespace DevHours.CloudNative.Api
                 var blobServiceClient = new BlobServiceClient(configuration.GetSection("Images").GetValue<string>("ConnectionString"));
                 return blobServiceClient.GetBlobContainerClient(configuration.GetSection("Images").GetValue<string>("ContainerName"));
             });
+            
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddErrorHandler();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,6 +64,8 @@ namespace DevHours.CloudNative.Api
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseErrorHandler();
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
