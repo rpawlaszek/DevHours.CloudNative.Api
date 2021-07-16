@@ -1,3 +1,4 @@
+using Azure.Storage.Blobs;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -5,14 +6,13 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Azure.Storage.Blobs;
 
 namespace DevHours.CloudNative.Repositories
 {
     public class RoomImagesRepository : IBlobRepository<string>
     {
         private readonly BlobContainerClient client;
-        
+
         public RoomImagesRepository(string connectionString, string containerName)
         {
             var blobServiceClient = new BlobServiceClient(connectionString);
@@ -34,9 +34,9 @@ namespace DevHours.CloudNative.Repositories
             await client.CreateIfNotExistsAsync(cancellationToken: token);
 
             var prefix = key.Split('/', StringSplitOptions.RemoveEmptyEntries).First();
-            
+
             var result = client.GetBlobsAsync(prefix: prefix, cancellationToken: token);
-            
+
             await foreach (var page in result.AsPages())
             {
                 if (token.IsCancellationRequested)

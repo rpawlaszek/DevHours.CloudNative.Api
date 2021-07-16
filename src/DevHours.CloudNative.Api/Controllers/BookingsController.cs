@@ -1,14 +1,14 @@
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using DevHours.CloudNative.Domain;
-using System.Threading.Tasks;
-using System.Threading;
-using Microsoft.AspNetCore.OData.Query;
 using AutoMapper;
-using DevHours.CloudNative.Api.Data.Dtos;
 using AutoMapper.QueryableExtensions;
+using DevHours.CloudNative.Api.Data.Dtos;
 using DevHours.CloudNative.Core.Services;
+using DevHours.CloudNative.Domain;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.Extensions.Logging;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DevHours.CloudNative.Api.Controllers
 {

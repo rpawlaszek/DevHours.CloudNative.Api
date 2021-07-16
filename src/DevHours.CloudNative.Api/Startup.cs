@@ -1,14 +1,14 @@
-using System;
-using DevHours.CloudNative.Api.ErrorHandling.Extensions;
 using DevHours.CloudNative.Api.Data.OData.Extensions;
+using DevHours.CloudNative.Api.ErrorHandling.Extensions;
 using DevHours.CloudNative.Core;
+using DevHours.CloudNative.DataAccess;
 using DevHours.CloudNative.Infra;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using DevHours.CloudNative.DataAccess;
+using System;
 
 namespace DevHours.CloudNative.Api
 {

@@ -7,10 +7,14 @@ jobs:
     name: DevHours.CloudNative.Api
     steps:
       - uses: actions/checkout@v2
+
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '5.0.302'
+
       - name: Build
         run: dotnet build
-        working-directory: ./src/DevHours.CloudNative.Api
+
+      - name: Test
+        run: dotnet test

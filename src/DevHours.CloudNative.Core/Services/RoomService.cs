@@ -1,10 +1,10 @@
+using DevHours.CloudNative.Domain;
+using DevHours.CloudNative.Repositories;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DevHours.CloudNative.Domain;
-using DevHours.CloudNative.Repositories;
-using Microsoft.Extensions.Logging;
 
 namespace DevHours.CloudNative.Core.Services
 {
@@ -19,7 +19,7 @@ namespace DevHours.CloudNative.Core.Services
         public IQueryable<Room> Query() => repository.Query();
 
         public ValueTask<Room> GetRoomAsync(int roomId, CancellationToken token = default) => repository.GetAsync(roomId, token);
-        
+
         public Task<Room> AddRoomAsync(Room room, CancellationToken token = default)
             => repository.AddAsync(room, token);
 
@@ -34,7 +34,7 @@ namespace DevHours.CloudNative.Core.Services
 
             await repository.UpdateAsync(room, token);
         }
-        
+
         public async Task DeleteRoomAsync(int roomId, CancellationToken token = default)
         {
             var stored = await repository.GetAsync(roomId);

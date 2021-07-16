@@ -1,9 +1,9 @@
-using DevHours.CloudNative.Domain;
 using DevHours.CloudNative.DataAccess;
+using DevHours.CloudNative.Domain;
 using DevHours.CloudNative.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DevHours.CloudNative.Infra
 {
@@ -20,7 +20,8 @@ namespace DevHours.CloudNative.Infra
             services.AddScoped<IDataRepository<Room>, RoomsRepository>();
             services.AddScoped<IDataRepository<Booking>, BookingRepository>();
 
-            services.AddScoped<IBlobRepository<string>>(provider => {
+            services.AddScoped<IBlobRepository<string>>(provider =>
+            {
                 var configuration = provider.GetService<IConfiguration>();
                 return new RoomImagesRepository(
                     configuration.GetSection("Images").GetValue<string>("ConnectionString"),

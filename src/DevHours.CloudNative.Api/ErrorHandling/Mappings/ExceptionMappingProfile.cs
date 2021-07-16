@@ -1,6 +1,6 @@
+using AutoMapper;
 using System;
 using System.Net;
-using AutoMapper;
 
 namespace DevHours.CloudNative.Api.ErrorHandling.Mappings
 {

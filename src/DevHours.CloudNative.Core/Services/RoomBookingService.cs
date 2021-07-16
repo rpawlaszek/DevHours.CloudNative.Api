@@ -1,10 +1,10 @@
+using DevHours.CloudNative.Domain;
+using DevHours.CloudNative.Repositories;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DevHours.CloudNative.Domain;
-using DevHours.CloudNative.Repositories;
-using Microsoft.Extensions.Logging;
 
 namespace DevHours.CloudNative.Core.Services
 {
@@ -21,16 +21,16 @@ namespace DevHours.CloudNative.Core.Services
         public IQueryable<Booking> Query() => bookingsRepository.Query();
 
         public ValueTask<Booking> GetBookingAsync(int bookingId, CancellationToken token = default) => bookingsRepository.GetAsync(bookingId, token);
-          
+
         public async Task<Booking> Book(Booking bookingRequest, CancellationToken token = default)
         {
             var room = await roomsRepository.GetAsync(bookingRequest.RoomId, token);
 
-            if (room is null) 
+            if (room is null)
             {
                 throw new NullReferenceException("There is no such room");
             }
-            
+
             if (bookingRequest.EndDate < bookingRequest.StartDate)
             {
                 throw new Exception("Start and End dates must be in correct order");
@@ -45,24 +45,24 @@ namespace DevHours.CloudNative.Core.Services
 
             if (bookingsRepository.Query()
                 .Where(b => b.RoomId == bookingRequest.RoomId)
-                .Where(b => 
-                    (r.StartDate <= b.StartDate && r.EndDate >= b.StartDate) 
+                .Where(b =>
+                    (r.StartDate <= b.StartDate && r.EndDate >= b.StartDate)
                     ||
                     (r.StartDate >= b.StartDate && r.EndDate <= b.EndDate)
                     ||
                     (r.StartDate <= b.EndDate && r.EndDate >= b.EndDate))
                 .Any())
-                {
-                    throw new Exception("Room already booked at the specified range");
-                }
+            {
+                throw new Exception("Room already booked at the specified range");
+            }
 
             var createdBooking = await bookingsRepository.AddAsync(bookingRequest, token);
 
-            return createdBooking; 
+            return createdBooking;
         }
 
         public async Task CancelBooking(int id, CancellationToken token = default)
-        {            
+        {
             var stored = await bookingsRepository.GetAsync(id);
 
             if (stored is null)

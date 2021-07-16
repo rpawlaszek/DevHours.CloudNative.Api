@@ -1,12 +1,12 @@
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using DevHours.CloudNative.Repositories;
-using System.Threading.Tasks;
-using System.Threading;
-using Microsoft.AspNetCore.OData.Query;
-using System;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DevHours.CloudNative.Api.Controllers
 {
