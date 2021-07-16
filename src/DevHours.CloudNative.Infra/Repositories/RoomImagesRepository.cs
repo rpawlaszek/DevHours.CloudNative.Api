@@ -57,6 +57,7 @@ namespace DevHours.CloudNative.Repositories
         {
             await client.CreateIfNotExistsAsync(cancellationToken: token);
             var blobClient = client.GetBlobClient(key);
+
             await blobClient.DeleteAsync(cancellationToken: token);
         }
 
