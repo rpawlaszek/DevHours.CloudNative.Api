@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@master 
       - uses: azure/login@v1 
         with: 
-          creds: $ 
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
        
       # Setup .NET Core SDK 
       - name: Setup .NET Core 
@@ -30,7 +30,7 @@ jobs:
       - name: 'Run Azure webapp deploy action using azure credentials' 
         uses: azure/webapps-deploy@v2 
         with:  
-          app-name: $ # Replace with your app name 
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
           package: '$/myapp' 
        
       - name: logout 
