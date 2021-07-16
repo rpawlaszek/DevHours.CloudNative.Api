@@ -28,7 +28,7 @@ namespace DevHours.CloudNative.Api.Controllers
         [HttpGet("{id:guid}", Name = "GetImage")]
         public async Task<FileStreamResult> GetImageAsync(int roomId, Guid id, CancellationToken token = default)
         {
-            var (type, stream) = await imagesService.DownloadAsync(roomId, id, token);
+            var (stream, type) = await imagesService.DownloadAsync(roomId, id, token);
             return File(stream, type);
         }
 

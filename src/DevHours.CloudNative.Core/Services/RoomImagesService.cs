@@ -16,8 +16,8 @@ namespace DevHours.CloudNative.Repositories
         public IAsyncEnumerable<string> ListNamesAsync(int roomId, CancellationToken token = default)
             => imagesRepository.ListNamesAsync($"{roomId}", token);
 
-        public async Task<(string, Stream)> DownloadAsync(int roomId, Guid imageId, CancellationToken token = default)
-            => ($"{roomId}/{imageId}", await imagesRepository.DownloadAsync($"{roomId}/{imageId}", token));
+        public async Task<(Stream, string)> DownloadAsync(int roomId, Guid imageId, CancellationToken token = default)
+            => await imagesRepository.DownloadAsync($"{roomId}/{imageId}", token);
 
         public async Task<string> UploadAsync(int roomId, Guid imageId, Stream contents, string type, CancellationToken token = default)
         {
