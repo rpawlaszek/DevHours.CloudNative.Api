@@ -1,11 +1,11 @@
 name: .NET Core 
 on: [push] 
 env: 
-  AZURE_WEBAPP_PACKAGE_PATH: './src/DevHours.CloudNative.Api'      # set this to the path to your web app project, defaults to the repository root 
+  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root 
   DOTNET_VERSION: '5.0.302'           # this is set to the GA version of .NET 5
 jobs: 
   build: 
-    runs-on: windows-latest 
+    runs-on: ubuntu-latest
     steps: 
       # Checkout the repo 
       - uses: actions/checkout@master 
@@ -18,15 +18,16 @@ jobs:
       - name: Setup .NET Core 
         uses: actions/setup-dotnet@v1 
         with: 
-          dotnet-version: $  
+          dotnet-version: ${{ env.DOTNET_VERSION }}
        
       # Run dotnet build and publish 
       - name: dotnet build and publish 
         run: | 
           dotnet restore 
           dotnet build --configuration Release 
-          dotnet publish -c Release -o '$/myapp'  
-           
+          dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
+        working-directory: ./src/DevHours.CloudNative.Api
+
       # Deploy to Azure Web apps 
       - name: 'Run Azure webapp deploy action using azure credentials' 
         uses: azure/webapps-deploy@v2 
