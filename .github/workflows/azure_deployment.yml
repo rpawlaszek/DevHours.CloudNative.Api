@@ -9,7 +9,8 @@ jobs:
     steps: 
       # Checkout the repo 
       - uses: actions/checkout@master 
-      - uses: azure/login@v1 
+      
+      - uses: azure/actions/login@v1
         with: 
           creds: ${{ secrets.AZURE_CREDENTIALS }}
        
