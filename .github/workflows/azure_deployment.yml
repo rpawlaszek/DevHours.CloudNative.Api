@@ -34,6 +34,7 @@ jobs:
         with:  
           app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
           package: '$/myapp' 
+        working-directory: ./src/DevHours.CloudNative.Api
        
       - name: logout 
         run: | 
