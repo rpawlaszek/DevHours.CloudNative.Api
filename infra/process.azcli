@@ -14,6 +14,6 @@ az deployment group create --template-file ./stack.bicep --resource-group rg-dev
 az group list --query "[?name=='rg-devhours-cloudnative']" | jq '.[] | .id'
 
 ## Create a Service Principal
-az ad sp create-for-rbac --name ghtmpdeployer --role contributor --scopes /subscriptions/61272011-aa35-4524-95c7-bb9c842f4e39/resourceGroups/rg-devhours-cloudnative --sdk-auth
+az ad sp create-for-rbac --name <<name of the webapp from the deployment output> --role contributor --scopes <<id from the above command>> --sdk-auth
 
 ## IMPORTANT: see how to store the creds in GH Secrets: https://github.com/Azure/login#configure-deployment-credentials
